@@ -17,14 +17,7 @@ import {
 } from "react-native";
 import MapView from "react-native-map";
 
-import states from "./data/states";
-
-const Images = [
-  { uri: "https://i.imgur.com/sNam9iJ.jpg" },
-  { uri: "https://i.imgur.com/N7rlQYt.jpg" },
-  { uri: "https://i.imgur.com/UDrH0wm.jpg" },
-  { uri: "https://i.imgur.com/Ka8kNST.jpg" }
-];
+import state from "./data/states";
 
 const { width, height } = Dimensions.get("window");
 
@@ -36,10 +29,17 @@ export default class App extends Component<Props> {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
+
   render() {
     const { container } = styles;
-
-    return <View style={container} />;
+    // NOTE: map => (this.map = map) is ref so we can animate the map later (when region changes)
+    return (
+      <MapView
+        ref={map => (this.map = map)}
+        initialRegion={this.state.region}
+        style={styles.container}
+      />
+    );
   }
 }
 
