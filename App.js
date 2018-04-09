@@ -15,8 +15,9 @@ import {
   Image,
   Dimensions
 } from "react-native";
-
 import MapView from "react-native-map";
+
+import states from "./data/states";
 
 const Images = [
   { uri: "https://i.imgur.com/sNam9iJ.jpg" },
