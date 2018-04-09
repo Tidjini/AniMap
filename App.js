@@ -85,7 +85,9 @@ export default class App extends Component {
         )}
         style={scrollView}
         contentContainerStyle={endPadding}
-      />
+      >
+        {this.renderCards()}
+      </Animated.ScrollView>
     );
   }
   render() {
@@ -97,7 +99,10 @@ export default class App extends Component {
           ref={map => (this.map = map)}
           initialRegion={this.state.region}
           style={container}
-        />
+        >
+          {this.renderMarkers()}
+        </MapView>
+        {this.renderCardsScroll()}
       </View>
     );
   }
