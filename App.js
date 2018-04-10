@@ -32,12 +32,42 @@ export default class App extends Component {
 
   renderMarkers() {
     const { markerWrap, ring, marker } = styles;
+
+    const interplations = this.state.markers.map((marker, index) => {
+      const inputRange = [
+        (index - 1) * CARD_WIDTH,
+        index * CARD_WIDTH,
+        (index + 1) * CARD_WIDTH
+      ];
+      //With out the clamp the interpolate will calculate the rate of change and keep applying it (keep calculate for every marker and removed it from map)??
+      const scale = this.animation.interpolate({
+        inputRange,
+        outputRange: [1, 2.5, 1],
+        extrapolate: "clamp"
+      });
+      const opacity = this.animation.interpolate({
+        inputRange,
+        outputRange: [0.35, 1, 0.35],
+        extrapolate: "clamp"
+      });
+      return { scale, opacity };
+    });
     // NOTE: this custom Marker for the map cause we add some children, if not the map render the default marker
     this.state.markers.map((marker, index) => {
+      const scaleStyle = {
+        transform: [
+          {
+            scale: interpolations[index].scale
+          }
+        ]
+      };
+      const opacityStyle = {
+        opacity: interpolations[index].opacity
+      };
       return (
         <MapView.Marker key={index} coordinate={marker.coordinate}>
-          <Animated.View style={[markerWrap]}>
-            <Animated.View style={[ring]} />
+          <Animated.View style={[markerWrap, opacityStyle]}>
+            <Animated.View style={[ring, scaleStyle]} />
             <View style={marker} />
           </Animated.View>
         </MapView.Marker>
