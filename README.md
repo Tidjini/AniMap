@@ -13,6 +13,8 @@ provided "com.facebook.react:react-native:+"
 compile "com.google.android.gms:play-services-base:$googlePlayServicesVersion"
 compile "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
 compile "com.google.maps.android:android-maps-utils:$androidMapsUtilsVersion"
+      ref :https://github.com/react-community/react-native-maps/issues/2152
+
 
 2/Execution failed for task ':react-native-maps:mergeReleaseResources'.
 casued by Windows, keep below 240 characters for folder Paths
@@ -24,3 +26,4 @@ In the root build.gradle file:
              ...
           }
       }
+      ref : https://github.com/react-community/react-native-maps/issues/588
