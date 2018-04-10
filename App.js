@@ -29,11 +29,37 @@ export default class App extends Component {
     this.index = 0;
     this.animation = new Animated.Value(0);
   }
-
+  componentDidMount() {
+    this.animation.addListener(({ value }) => {
+      let index = Math.floor(value / CARD_WIDTH + 0.3); // animate 30% away from landing on the next item ...?
+      //check if we are in our range
+      if (index > state.markers.length) {
+        index = state.markers.length - 1;
+      }
+      if (index < 0) {
+        index = 0;
+      }
+      clearTimeout(this.regionTimeout);
+      this.regionTimeout = setTimeout(() => {
+        if (this.index !== index) {
+          this.index = index;
+          const { coordinate } = this.state.markers[index];
+          this.map.animateToRegion(
+            {
+              ...coordinate,
+              latitudeDelta: this.state.region.latitudeDelta,
+              longitudeDelta: this.state.region.longitudeDelta
+            },
+            350
+          );
+        }
+      }, 10);
+    });
+  }
   renderMarkers() {
     const { markerWrap, ring, marker } = styles;
 
-    const interplations = this.state.markers.map((marker, index) => {
+    const interplations = state.markers.map((marker, index) => {
       const inputRange = [
         (index - 1) * CARD_WIDTH,
         index * CARD_WIDTH,
@@ -53,7 +79,7 @@ export default class App extends Component {
       return { scale, opacity };
     });
     // NOTE: this custom Marker for the map cause we add some children, if not the map render the default marker
-    this.state.markers.map((marker, index) => {
+    state.markers.map((marker, index) => {
       const scaleStyle = {
         transform: [
           {
@@ -76,7 +102,7 @@ export default class App extends Component {
   }
   renderCards() {
     const { card, cardImage, textContent, cardtitle, cardDescription } = styles;
-    this.state.markers.map((marker, index) => {
+    state.markers.map((marker, index) => {
       return (
         <View style={card} key={index}>
           <Image source={marker.image} style={cardImage} resizeMode="cover" />
@@ -127,7 +153,7 @@ export default class App extends Component {
       <View style={container}>
         <MapView
           ref={map => (this.map = map)}
-          initialRegion={this.state.region}
+          initialRegion={state.region}
           style={container}
         >
           {this.renderMarkers()}
